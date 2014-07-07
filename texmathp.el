@@ -1,4 +1,4 @@
-;;; texmathp.el -- Code to check if point is inside LaTeX math environment
+;;; texmathp.el --- Code to check if point is inside LaTeX math environment
 ;; Copyright (c) 1998, 2005 Carsten Dominik
 
 ;; Author: Carsten Dominik <dominik@science.uva.nl>
