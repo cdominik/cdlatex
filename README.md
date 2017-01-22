@@ -1,9 +1,12 @@
 # CDLaTex
 Copyright (c) 2010, 2011, 2012, 2014 Free Software Foundation, Inc.  
 **AUTHOR:** Carsten Dominik <carsten.dominik@gmail.com>  
-**Keywords:** tex  
-**Version:** 4.7
+**KEYWORD** tex  
+**VERSION:** 4.7
 
+## Note
+This is a mirror from Carsten Dominik, which is maintained by Songpeng Zu.
+Currently it is the **latest** version.
 
 ## Introduction
 CDLaTeX is a minor mode for Emacs supporting fast insertion of environment
@@ -21,7 +24,7 @@ Here are some of the differences between CDLaTeX and the corresponding parts of 
     text mode and math mode in LaTeX and adapts automatically to that.
     
 ## Download & Installation
-You can directly install this package under *melpa* in Emacs. OR you can
+You can directly install this package under *melpa* in Emacs. Or you can
 download this file, add it to your load-path. 
 
 ## Manual
@@ -48,10 +51,11 @@ CDLaTeX has an abbrev-like mechanism to insert full LaTeX environments and other
 templates into the buffer. Abbreviation expansion is triggered with the TAB
 key only, not with SPC or RET. For example, typing "ite<TAB>" inserts an
 itemize environment. A full list of defined abbreviations is available with
-the command `C-c ?' (`cdlatex-command-help').
+the command `C-c ?` (cdlatex-command-help).
  
 #### ENVIRONMENT 
-Typing `C-c {' (`cdlatex-environment') uses the minibuffer to
+Typing `C-c {`, which means
+**cdlatex-environment**, and uses the minibuffer to
 complete the name of a LaTeX environment and inserts a template
 for this environment into the buffer.  These environment
 templates also contain labels created with RefTeX.  In a
@@ -61,37 +65,38 @@ the next point of interest in the template.
 
 For many frequently used LaTeX environments, abbreviations are
 available.  Most of the time, the abbreviation consists of the
-first three letters of the environment name: `equ<TAB>' expands
+first three letters of the environment name: `equ<TAB>` expands
 into
+```latex
 \begin{equation}
 \label{eq:1}
 
 \end{equation}
-
-Similarly, `ali<TAB>' inserts an AMS-LaTeX align environment
+```  
+Similarly, `ali<TAB>` inserts an AMS-LaTeX align environment
 template etc.  For a full list of environment abbreviations, use
-`C-c ?'.
+`C-c ?`.
 
-Use the command `C-c -' (`cdlatex-item') to insert a generalized
+Use the command `C-c -` , which means **cdlatex-item** to insert a generalized
 new "item" in any "list"-like environment.  For example, in an
 itemize environment, this inserts "\item", in an enumerate
-environment it inserts "\item\label{item:25}" and in an eqnarray
-environment, it inserts "\label{eq:25} \n & &".  When
+environment it inserts `\item\label{item:25}` and in an eqnarray
+environment, it inserts `\label{eq:25} \n & &`.  When
 appropriate, newlines are inserted, and the previous item is also
-closed with "\\".  `cdlatex-item' can also be invoked with the 
-abbreviation "it<TAB>".
+closed with "\\".  **cdlatex-item** can also be invoked with the 
+abbreviation `it<TAB>`.
  
 #### MATH TEMPLATES
 Abbreviations are also used to insert simple math templates
 into the buffer.  The cursor will be positioned properly.  For
-example, typing `fr<TAB>' will insert "\frac{}{}" with the
-cursor in the first pair of parenthesis.  Typing `lr(<TAB>'
-will insert a "\left( \right)" pair and position the cursor in
+example, typing `fr<TAB>` will insert `\frac{}{}` with the
+cursor in the first pair of parenthesis.  Typing `lr(<TAB>`
+will insert a **`\left( \right)`** pair and position the cursor in
 between, etc.  Again, the TAB key can be used to jump to the
 points in the template where additional text has to be
-inserted.  For example in the `\frac{}{}' template, it will
+inserted.  For example in the `\frac{}{}` template, it will
 move you from the first argument to the second and then out of
-the second.  For a list of available templates, type `C-c ?'.
+the second.  For a list of available templates, type `C-c ?`.
  
 ### MATHEMATICAL SYMBOLS
 This feature is similar to the functionality in the Math minor mode
@@ -99,13 +104,14 @@ of AUCTeX, and to the input methods of the X-Symbol package.  It is
 introduced by the backquote character.  Backquote followed by any
 character inserts a LaTeX math macro into the buffer.  If
 necessary, a pair of "$" is inserted to switch to math mode.  For
-example, typing "`a" inserts "$\alpha$".  Since LaTeX defines many
-more mathematical symbols than the alphabet has letters, different
+example, typing "\`a" inserts `\alpha` in latex format.  
+
+Since LaTeX defines many more mathematical symbols than the alphabet has letters, different
 sets of math macros are provided.  We call the different sets
 "levels".  On each level, another LaTeX macro is assigned to a
 given letter.  To select the different levels, simply press the
 backquote character several times before pressing the letter.  For
-example, typing "`d" inserts "\delta" (level 1), and typing "``d"
+example, typing "\`d" inserts "\delta" (level 1), and typing "\`\`d"
 inserts "\partial" (level 2).  Similarly, "`e" inserts "\epsilon"
 and "``e" inserts "\vareppsilon".
 
@@ -115,7 +121,7 @@ lists all math macros available on the current level.  Initially,
 when you type slowly, this window will pop up each time you press
 backquote.  However, after you have learned the different keys, you
 will type more quickly and the help window is not shown.  Try it
-out: First press "`" (backquote), wait for the help window and then
+out: First press "\`" (backquote), wait for the help window and then
 press "a" to get "\alpha".  Then press "`" and "b" as a quick
 sequence to get "\beta", without the help window.
 
@@ -124,7 +130,7 @@ configurable - see the variable `cdlatex-math-symbol-alist'.
  
 ### ACCENTS AND FONTS
 Putting accents on mathematical characters and/or changing the font of a
-character uses key combinations with the quote character "'" as a prefix.
+character uses key combinations with the quote character "\'" as a prefix.
 The accent or font change is applied to the character or LaTeX macro
 *before* point. 
 
