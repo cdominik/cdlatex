@@ -1,9 +1,9 @@
 ;;; cdlatex.el --- Fast input methods for LaTeX environments and math
-;; Copyright (c) 2010, 2011, 2012, 2014 Free Software Foundation, Inc.
+;; Copyright (c) 2010, 2011, 2012, 2014, 2019 Free Software Foundation, Inc.
 ;;
 ;; Author: Carsten Dominik <carsten.dominik@gmail.com>
 ;; Keywords: tex
-;; Version: 4.7
+;; Version: 4.8
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -551,6 +551,13 @@ letter, the parenthesis will be removed."
   :group 'cdlatex-miscellaneous-configurations
   :type '(boolean))
 
+(defcustom cdlatex-sub-super-scripts-outside-math-mode t
+  "*Non-nil means, inserting ^ or _ will add dollars outside math environment.
+So in text mode surrounding dollars and braces will be added with `_' and `^'.
+When nil, `_' and `^' will just self-insert."
+  :group 'cdlatex-miscellaneous-configurations
+  :type '(boolean))
+
 (defcustom cdlatex-auto-help-delay 1.5
   "Number of idle seconds before display of auto-help.
 When executing cdlatex-math-symbol or cdlatex-math-modify, display
@@ -772,23 +779,26 @@ When not in LaTeX math environment, _{} and ^{} will have dollars."
   (if (cdlatex-number-of-backslashes-is-odd)
       ;; Quoted
       (insert (event-basic-type last-command-event))
-    ;; Check if we need to switch to math mode
-    (if (not (texmathp)) (cdlatex-dollar))
-    (if (string= (buffer-substring (max (point-min) (- (point) 2)) (point))
-                 (concat (char-to-string (event-basic-type last-command-event))
-			 "{"))
-        ;; We are at the start of a sub/suberscript.  Allow a__{b} and a^^{b}
-        ;; This is an undocumented feature, please keep it in.  It supports
-        ;; a special notation which can be used for upright sub- and 
-        ;; superscripts. 
-        (progn
-          (backward-char 1)
-          (insert (event-basic-type last-command-event))
-          (forward-char 1))
-      ;; Insert the normal template.
-      (insert (event-basic-type last-command-event))
-      (insert "{}")
-      (forward-char -1))))
+    ;; Check if we are in math mode, if not switch to or only add _ or ^
+    (if (and (not (texmathp))
+	     (not cdlatex-sub-super-scripts-outside-math-mode))
+	(insert (event-basic-type last-command-event))
+      (if (not (texmathp)) (cdlatex-dollar))
+      (if (string= (buffer-substring (max (point-min) (- (point) 2)) (point))
+                   (concat (char-to-string (event-basic-type last-command-event))
+			   "{"))
+          ;; We are at the start of a sub/suberscript.  Allow a__{b} and a^^{b}
+          ;; This is an undocumented feature, please keep it in.  It supports
+          ;; a special notation which can be used for upright sub- and
+          ;; superscripts.
+          (progn
+            (backward-char 1)
+            (insert (event-basic-type last-command-event))
+            (forward-char 1))
+        ;; Insert the normal template.
+        (insert (event-basic-type last-command-event))
+        (insert "{}")
+        (forward-char -1)))))
 
 (defun cdlatex-lr-pair ()
   "Insert a \\left-\\right pair of parens."
