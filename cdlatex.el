@@ -889,7 +889,7 @@ Sounds strange?  Try it out!"
                  (forward-char 1)
                  (delete-char 1))
         (forward-char 4))
-      (if (looking-at "[^_\\^({\\[]")
+      (if (looking-at "[^_^({[]")
           ;; stop after closing bracket, unless ^_[{( follow
           (throw 'stop t)))
      ((= (following-char) ?$)
