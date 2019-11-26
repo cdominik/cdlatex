@@ -2237,7 +2237,7 @@ and after changes to these variables via
 
 ;;; That's it! ----------------------------------------------------------------
 
-; Make sure tabels are compiled
+; Make sure tables are compiled
 (cdlatex-compute-tables)
 
 (provide 'cdlatex)
