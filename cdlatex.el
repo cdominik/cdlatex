@@ -2166,7 +2166,7 @@ these variables via `cdlatex-add-to-label-alist'."
 
 ;;; That's it! ----------------------------------------------------------------
 
-; Make sure tabels are compiled
+; Make sure tables are compiled
 (cdlatex-compute-tables)
 
 (provide 'cdlatex)
