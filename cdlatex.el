@@ -929,27 +929,29 @@ Sounds strange?  Try it out!"
               ;; stop after closing bracket, unless ^_[{( follow
               (throw 'stop t))))))))
 
-(defun cdlatex-command-help ()
+(defun cdlatex-command-help (&optional arg)
   "Show the available cdlatex commands in the help buffer."
-  (interactive)
-  (with-output-to-temp-buffer " *CDLaTeX Help*"
-    (princ "                    AVAILABLE KEYWORD COMMANDS WITH CDLaTeX\n")
-    (princ "                    --------------------------------------\n")
-    (princ "To execute, type keyword into buffer followed by TAB.\n\n")
-    (let ((cmdlist cdlatex-command-alist-comb) item key doc text math)
-      (while cmdlist
-        (setq item (car cmdlist)
-              cmdlist (cdr cmdlist)
-              key (car item)
-              doc (nth 1 item)
-	      text (nth 5 item)
-	      math (nth 6 item))
-        (princ (format "%-10.10s %-58.58s %4s/%4s\n" key
-                       (if (> (length doc) 59)
-                           (substring doc 0 59)
-                         doc)
-		       (if text "TEXT" "")
-		       (if math "MATH" "")))))))
+  (interactive "P")
+  (if arg
+      (call-interactively 'TeX-documentation-texdoc)
+    (with-output-to-temp-buffer " *CDLaTeX Help*"
+      (princ "                    AVAILABLE KEYWORD COMMANDS WITH CDLaTeX\n")
+      (princ "                    --------------------------------------\n")
+      (princ "To execute, type keyword into buffer followed by TAB.\n\n")
+      (let ((cmdlist cdlatex-command-alist-comb) item key doc text math)
+        (while cmdlist
+          (setq item (car cmdlist)
+                cmdlist (cdr cmdlist)
+                key (car item)
+                doc (nth 1 item)
+                text (nth 5 item)
+                math (nth 6 item))
+          (princ (format "%-10.10s %-58.58s %4s/%4s\n" key
+                         (if (> (length doc) 59)
+                             (substring doc 0 59)
+                           doc)
+                         (if text "TEXT" "")
+                         (if math "MATH" ""))))))))
 
 ;;; ---------------------------------------------------------------------------
 ;;;
