@@ -1,9 +1,9 @@
 ;;; cdlatex.el --- Fast input methods for LaTeX environments and math
-;; Copyright (c) 2010, 2011, 2012, 2014, 2019 Free Software Foundation, Inc.
+;; Copyright (c) 2010, 2011, 2012, 2014, 2019, 2020 Free Software Foundation, Inc.
 ;;
 ;; Author: Carsten Dominik <carsten.dominik@gmail.com>
 ;; Keywords: tex
-;; Version: 4.8
+;; Version: 4.9
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -558,6 +558,12 @@ When nil, `_' and `^' will just self-insert."
   :group 'cdlatex-miscellaneous-configurations
   :type '(boolean))
 
+(defcustom cdlatex-use-dollar-to-ensure-math t
+  "*Non-nil means, use $...$ to force a math mode setting where needed.
+When nil, use \\(...\\) instead."
+  :group 'cdlatex-miscellaneous-configurations
+  :type '(boolean))
+
 (defcustom cdlatex-auto-help-delay 1.5
   "Number of idle seconds before display of auto-help.
 When executing cdlatex-math-symbol or cdlatex-math-modify, display
@@ -742,7 +748,10 @@ Entering cdlatex-mode calls the hook cdlatex-mode-hook.
 (defun cdlatex-ensure-math ()
   ;; Make sure we are in math
   (unless (texmathp)
-    (cdlatex-dollar)))
+    (if cdlatex-use-dollar-to-ensure-math
+        (cdlatex-dollar)
+      (insert "\\(\\)")
+      (backward-char 2))))
 
 (defun cdlatex-dollar (&optional arg)
   "Insert a pair of dollars unless number of backslashes before point is odd.
@@ -783,7 +792,7 @@ When not in LaTeX math environment, _{} and ^{} will have dollars."
     (if (and (not (texmathp))
 	     (not cdlatex-sub-super-scripts-outside-math-mode))
 	(insert (event-basic-type last-command-event))
-      (if (not (texmathp)) (cdlatex-dollar))
+      (if (not (texmathp)) (cdlatex-ensure-math))
       (if (string= (buffer-substring (max (point-min) (- (point) 2)) (point))
                    (concat (char-to-string (event-basic-type last-command-event))
 			   "{"))
@@ -1114,7 +1123,7 @@ math environment, you also get a pair of dollars."
 
     (if (or (not (texmathp))
             (cdlatex-number-of-backslashes-is-odd))
-        (cdlatex-dollar))
+        (cdlatex-ensure-math))
 
     (insert symbol)
     (when (string-match "\\?" symbol)
