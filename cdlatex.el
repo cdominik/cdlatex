@@ -3,7 +3,7 @@
 ;;
 ;; Author: Carsten Dominik <carsten.dominik@gmail.com>
 ;; Keywords: tex
-;; Version: 4.9
+;; Version: 4.10
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -196,7 +196,16 @@
 ;;    belong to a subscript or superscript, CDLaTeX removes the braces if
 ;;    the sub/superscript consists of a single character.  For example
 ;;    typing "$10^3<TAB>" inserts "$10^3$", but typing "$10^34<TAB>"
-;;    inserts "$10^{34}$"
+;;    inserts "$10^{34}$".
+;;
+;;    If you press `_' or `^' twice, the template inserted will be
+;;    "_{\rm }" or "^{\rm }", respectively, to insert a roman
+;;    sub/super-script.  Style guides require that all sub and
+;;    superscipts that are descriptive (so not a mathematical or
+;;    physical quantity themselves) need to be roman.  So $x_i$ is i
+;;    is an index, but $x_{\rm max}$ to indicate the maximum value.  You
+;;    can disable this behavior through the variable
+;;    `cdlatex-make-sub-superscript-roman-if-pressed-twice'.
 ;; 
 ;; 5. THE OVERLOADED TAB KEY
 ;;    ----------------------
@@ -523,6 +532,17 @@ Each element contains 6 items:
 		(boolean :tag "Remove dot in i/j")
 		(boolean :tag "Italic correction"))))
 
+(defcustom cdlatex-make-sub-superscript-roman-if-pressed-twice nil
+  "*Non-nil means, pressing `^` or `_' twice inserts roman sub/superscript."
+  :group 'cdlatex-math-support
+  :type 'boolean)
+
+(defcustom cdlatex-use-dollar-to-ensure-math t
+  "*Non-nil means, use $...$ to force a math mode setting where needed.
+When nil, use \\(...\\) instead."
+  :group 'cdlatex-math-support
+  :type '(boolean))
+
 ;; Miscellaneous configurations -----------------------------------------
 
 (defgroup cdlatex-miscellaneous-configurations nil
@@ -555,12 +575,6 @@ letter, the parenthesis will be removed."
   "*Non-nil means, inserting ^ or _ will add dollars outside math environment.
 So in text mode surrounding dollars and braces will be added with `_' and `^'.
 When nil, `_' and `^' will just self-insert."
-  :group 'cdlatex-miscellaneous-configurations
-  :type '(boolean))
-
-(defcustom cdlatex-use-dollar-to-ensure-math t
-  "*Non-nil means, use $...$ to force a math mode setting where needed.
-When nil, use \\(...\\) instead."
   :group 'cdlatex-miscellaneous-configurations
   :type '(boolean))
 
@@ -783,27 +797,20 @@ With arg, insert pair of double dollars."
 
 (defun cdlatex-sub-superscript ()
   "Insert ^{} or _{} unless the number of backslashes before point is odd.
-When not in LaTeX math environment, _{} and ^{} will have dollars."
+When not in LaTeX math environment, _{} and ^{} will have dollars.
+When pressed twice, make the sub/superscript roman."
   (interactive)
-  (if (cdlatex-number-of-backslashes-is-odd)
-      ;; Quoted
-      (insert (event-basic-type last-command-event))
-    ;; Check if we are in math mode, if not switch to or only add _ or ^
-    (if (and (not (texmathp))
-	     (not cdlatex-sub-super-scripts-outside-math-mode))
-	(insert (event-basic-type last-command-event))
-      (if (not (texmathp)) (cdlatex-ensure-math))
-      (if (string= (buffer-substring (max (point-min) (- (point) 2)) (point))
-                   (concat (char-to-string (event-basic-type last-command-event))
-			   "{"))
-          ;; We are at the start of a sub/suberscript.  Allow a__{b} and a^^{b}
-          ;; This is an undocumented feature, please keep it in.  It supports
-          ;; a special notation which can be used for upright sub- and
-          ;; superscripts.
-          (progn
-            (backward-char 1)
-            (insert (event-basic-type last-command-event))
-            (forward-char 1))
+  (if (and cdlatex-make-sub-superscript-roman-if-pressed-twice
+           (equal this-command last-command))
+      (insert "\\rm ")
+    (if (cdlatex-number-of-backslashes-is-odd)
+        ;; Quoted
+        (insert (event-basic-type last-command-event))
+      ;; Check if we are in math mode, if not switch to or only add _ or ^
+      (if (and (not (texmathp))
+               (not cdlatex-sub-super-scripts-outside-math-mode))
+          (insert (event-basic-type last-command-event))
+        (if (not (texmathp)) (cdlatex-ensure-math))
         ;; Insert the normal template.
         (insert (event-basic-type last-command-event))
         (insert "{}")
