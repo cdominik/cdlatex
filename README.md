@@ -28,8 +28,9 @@ You can directly install this package under *melpa* in Emacs. Or you can
 download this file, add it to your load-path. 
 
 ## Manual
-There is no manual for CDLaTeX, but here is the quick look for the commentary
-section of the Emacs Lisp file, it contains a decent description.
+There is no manual for CDLaTeX, but here is the quick look at the
+commentary section of the Emacs Lisp file, it contains a decent
+description.
 
 ### Turn on CDLaTeX
 
