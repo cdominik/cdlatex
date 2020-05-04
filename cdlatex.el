@@ -1427,13 +1427,14 @@ zZ
      "" cdlatex-environment ("gather") t nil)
     ("gat*"      "Insert a GATHER* environment template"
      "" cdlatex-environment ("gather*") t nil)
+    ("split"     "Insert SPLIT environment template"
+     "" cdlatex-environment ("split") t nil)
     ("fla"       "Insert a FLALIGN environment template"
      "" cdlatex-environment ("flalign") t nil)
     ("fla*"      "Insert a FLALIGN* environment template"
      "" cdlatex-environment ("flalign*") t nil)
     ("fg"        "Insert a FIGURE environment template"
      "" cdlatex-environment ("figure") t nil)
-    
 
     ("sn"        "Insert a \\section{} statement"
      "\\section{?}" cdlatex-position-cursor nil t nil)
@@ -1995,6 +1996,12 @@ AUTOLABEL
 "\\begin{gather*}
 ?
 \\end{gather*}"
+"\\\\?")
+;;------------------------------------
+( "split"
+"\\begin{split}
+?
+\\end{split}"
 "\\\\?")
 ;;------------------------------------
 ;;; SOME NON-STANDARD ENVIRONMENTS
