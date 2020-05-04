@@ -173,8 +173,8 @@ the sub/superscript consists of a single character.  For example
 typing "$10^3<TAB>" inserts "$10^3$", but typing "$10^34<TAB>"
 inserts "$10^{34}$".
 
-If you press `_` or `^` twice, the template inserted will be "_{\rm }"
-or "^{\rm }", respectively, to insert a roman sub/super-script.  Style
+If you press `_` or `^` twice, the template inserted will be `_{\rm }`
+or `^{\rm }`, respectively, to insert a roman sub/super-script.  Style
 guides require that all sub and superscipts that are descriptive (so
 not a mathematical or physical quantity themselves) need to be roman.
 So $x_i$ if i is an index, but $x_{\rm max}$ to indicate the maximum

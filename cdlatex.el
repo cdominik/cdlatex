@@ -199,7 +199,7 @@
 ;;    inserts "$10^{34}$".
 ;;
 ;;    If you press `_' or `^' twice, the template inserted will be
-;;    "_{\rm }" or "^{\rm }", respectively, to insert a roman
+;;    `_{\rm }' or `^{\rm }', respectively, to insert a roman
 ;;    sub/super-script.  Style guides require that all sub and
 ;;    superscipts that are descriptive (so not a mathematical or
 ;;    physical quantity themselves) need to be roman.  So $x_i$ is i
