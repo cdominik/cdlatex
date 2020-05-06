@@ -71,7 +71,9 @@
 ;;        templates also contain labels created with RefTeX.  In a
 ;;        template, text needs to be filled in at various places, which we
 ;;        call "points of interest".  You can use the TAB key to jump to
-;;        the next point of interest in the template.
+;;        the next point of interest in the template.  If there is an
+;;        active region, the region will be wrappend into the environment,
+;;        ignoring the template content.
 ;; 
 ;;        For many frequently used LaTeX environments, abbreviations are
 ;;        available.  Most of the time, the abbreviation consists of the
@@ -998,52 +1000,71 @@ statement.  Any keywords AUTOFILE will prompt the user for a file name
 the template.  This is mainly useful for \"items\" of environments, where
 \"\\\\\" is often needed as separator."
   (interactive)
-  (let ((env environment) begpos (endmarker (make-marker))
-	(auto-label cdlatex-insert-auto-labels-in-env-templates)
-        template)
+  (if (cdlatex-region-active-p)
+      (cdlatex-wrap-environment environment)
+    (let ((env environment) begpos (endmarker (make-marker))
+          (auto-label cdlatex-insert-auto-labels-in-env-templates)
+          template)
+      (if (not env)
+          (setq env (completing-read "Environment: " cdlatex-env-alist-comb nil nil "")))
+      (if (not (bolp)) (newline))
+      (setq begpos (point))
+      (if (try-completion env cdlatex-env-alist-comb)
+          (progn
+            (setq template (nth (if item 2 1) 
+                                (assoc env cdlatex-env-alist-comb)))
+            (if (string= (substring template 0 2) "\\\\")
+                ;; Need a double backslash to teminate previous item
+                (progn
+                  (setq template (substring template 2))
+                  (if (not (save-excursion
+                             (re-search-backward "\\\\\\\\[ \t\n]*\\="
+                                                 (- (point) 20) t)))
+                      (save-excursion
+                        (skip-chars-backward " \t\n")
+                        (insert "\\\\")))))
+            (insert template))
+        (insert "\\begin{" env "}\n?\n\\end{" env "}\n"))
+      (move-marker endmarker (point))
+      
+      ;; Look for AUTOFILE requests
+      (goto-char begpos)
+      (while (search-forward "AUTOFILE" (marker-position endmarker) t)
+        (backward-delete-char 8)
+        (call-interactively 'cdlatex-insert-filename))
+      
+      ;; Look for AUTOLABEL requests
+      (goto-char begpos)
+      (while (search-forward "AUTOLABEL" (marker-position endmarker) t)
+        (backward-delete-char 9)
+        (if (and auto-label (fboundp 'reftex-label))
+            (reftex-label env)
+          (save-excursion
+            (beginning-of-line 1)
+            (if (looking-at "[ \t]*\n")
+                (kill-line 1)))))
+      
+      ;; Position cursor at the first question-mark
+      (goto-char begpos)
+      (if (search-forward "?" (marker-position endmarker) t)
+          (backward-delete-char 1)))))
+  
+(defun cdlatex-wrap-environment (&optional environment)
+  "Wrap the active region into ENVIRONMENT.
+If the environment is not given, ask for it using completion."
+  (let ((env environment)
+        (beg (move-marker (make-marker) (region-beginning)))
+        (end (move-marker (make-marker) (region-end))))
     (if (not env)
-        (setq env (completing-read "Environment: " cdlatex-env-alist-comb nil nil "")))
-    (if (not (bolp)) (newline))
-    (setq begpos (point))
-    (if (try-completion env cdlatex-env-alist-comb)
-        (progn
-          (setq template (nth (if item 2 1) 
-                              (assoc env cdlatex-env-alist-comb)))
-          (if (string= (substring template 0 2) "\\\\")
-              ;; Need a double backslash to teminate previous item
-              (progn
-                (setq template (substring template 2))
-                (if (not (save-excursion
-                           (re-search-backward "\\\\\\\\[ \t\n]*\\="
-                                               (- (point) 20) t)))
-                    (save-excursion
-                      (skip-chars-backward " \t\n")
-                      (insert "\\\\")))))
-          (insert template))
-      (insert "\\begin{" env "}\n?\n\\end{" env "}\n"))
-    (move-marker endmarker (point))
-
-    ;; Look for AUTOFILE requests
-    (goto-char begpos)
-    (while (search-forward "AUTOFILE" (marker-position endmarker) t)
-      (backward-delete-char 8)
-      (call-interactively 'cdlatex-insert-filename))
-    
-    ;; Look for AUTOLABEL requests
-    (goto-char begpos)
-    (while (search-forward "AUTOLABEL" (marker-position endmarker) t)
-      (backward-delete-char 9)
-      (if (and auto-label (fboundp 'reftex-label))
-          (reftex-label env)
-        (save-excursion
-          (beginning-of-line 1)
-          (if (looking-at "[ \t]*\n")
-              (kill-line 1)))))
-
-    ;; Position cursor at the first question-mark
-    (goto-char begpos)
-    (if (search-forward "?" (marker-position endmarker) t)
-	(backward-delete-char 1))))
+        (setq env (completing-read "Environment: "
+                                   cdlatex-env-alist-comb nil nil "")))
+    (goto-char beg)
+    (if (not (looking-back "^[ \t]*" (point-at-bol))) (newline))
+    (insert "\\begin{" env "}\n")
+    (goto-char end)
+    (if (not (looking-back "^[ \t]*" (point-at-bol))) (newline))
+    (insert "\\end{" env "}\n")
+    ))  
 
 (defun cdlatex-item ()
   "Insert an \\item and provide a label if the environments supports that.
