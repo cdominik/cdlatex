@@ -3,7 +3,7 @@
 ;;
 ;; Author: Carsten Dominik <carsten.dominik@gmail.com>
 ;; Keywords: tex
-;; Version: 4.10
+;; Version: 4.11
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
