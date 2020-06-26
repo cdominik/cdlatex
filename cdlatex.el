@@ -600,7 +600,7 @@ automatic help when idle for more than this amount of time."
   (require 'finder)
   (finder-commentary "cdlatex.el"))
 
-(defconst cdlatex-version "4.6"
+(defconst cdlatex-version "4.11"
   "Version string for CDLaTeX.")
 
 (defvar cdlatex-mode nil
