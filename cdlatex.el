@@ -1186,7 +1186,7 @@ math environment, you also get a pair of dollars."
            ((= char ?\?)
             (if help-is-on
                 (progn
-                  (setq help-is-on (+ help-is-on (- (window-height) 1)))
+                  (setq help-is-on (+ help-is-on (- (window-height) 15)))
                   (if (> help-is-on (count-lines (point-min) (point-max)))
                       (setq help-is-on 1)))
               (setq help-is-on 1)))
@@ -1242,7 +1242,7 @@ constant `cdlatex-math-modify-alist'."
              ((= char ?\?)
               (if help-is-on
                   (progn
-                    (setq help-is-on (+ help-is-on (- (window-height) 1)))
+                    (setq help-is-on (+ help-is-on (- (window-height) 6)))
                     (if (> help-is-on (count-lines (point-min) (point-max)))
                         (setq help-is-on 1)))
                 (setq help-is-on 1)))
