@@ -317,7 +317,7 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))
+(eval-when-compile (require 'cl-lib))
 
 ;;; Begin of Configuration Section ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -2114,7 +2114,7 @@ these variables via `cdlatex-add-to-label-alist'."
 
   ;; The direct key bindings.
   (let (map dummy-map prefix modifiers symbol bindings) 
-    (loop for level from 1 to cdlatex-math-symbol-no-of-levels do
+    (cl-loop for level from 1 to cdlatex-math-symbol-no-of-levels do
 	  (setq dummy-map (make-sparse-keymap))
 	  (setq prefix (car (nth (1- level)
 				 cdlatex-math-symbol-direct-bindings)))
