@@ -1528,6 +1528,7 @@ zZ
     ( ?v    "\\check"             nil        t   t   nil )
     ( ?u    "\\breve"             nil        t   t   nil )
     ( ?m    "\\mbox"              nil        t   nil nil )
+    ( ?t    "\\text"              nil        t   nil nil )    
     ( ?c    "\\mathcal"           nil        t   nil nil )
     ( ?r    "\\mathrm"            "\\textrm" t   nil nil )
     ( ?i    "\\mathit"            "\\textit" t   nil nil )
