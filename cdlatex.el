@@ -557,6 +557,23 @@ Font-lock must be loaded as well to actually get fontified display."
   :group 'cdlatex-miscellaneous-configurations
   :type '(boolean))
 
+(defcustom cdlatex-takeover-parenthesis t
+  "*Non-nil means, cdlatex is allowed to take over the parenthesis insertion.
+THis means it will redefine the `(', `{', and `[' keys."
+  :group 'cdlatex-miscellaneous-configurations
+  :type '(boolean))
+
+(defcustom cdlatex-takeover-dollar t
+  "*Non-nil means, cdlatex is allowed to take over the $.
+THis means it will redefine the `$' keys."
+  :group 'cdlatex-miscellaneous-configurations
+  :type '(boolean))
+
+(defcustom cdlatex-takeover-subsuperscript t
+  "*Non-nil means, cdlatex is allowed to take over the ^ and _ keys."
+  :group 'cdlatex-miscellaneous-configurations
+  :type '(boolean))
+
 (defcustom cdlatex-paired-parens "$[{"
   "*String with the opening parens you want to have inserted paired.
 The following parens are allowed here: `$([{|<'.
@@ -2156,14 +2173,19 @@ these variables via `cdlatex-add-to-label-alist'."
 
 ;;; Keybindings --------------------------------------------------------------
 
-(define-key cdlatex-mode-map  "$"         'cdlatex-dollar)
-(define-key cdlatex-mode-map  "("         'cdlatex-pbb)
-(define-key cdlatex-mode-map  "{"         'cdlatex-pbb)
-(define-key cdlatex-mode-map  "["         'cdlatex-pbb)
-(define-key cdlatex-mode-map  "|"         'cdlatex-pbb)
-(define-key cdlatex-mode-map  "<"         'cdlatex-pbb)
-(define-key cdlatex-mode-map  "^"         'cdlatex-sub-superscript)
-(define-key cdlatex-mode-map  "_"         'cdlatex-sub-superscript)
+(if cdlatex-takeover-dollar
+    (define-key cdlatex-mode-map  "$"         'cdlatex-dollar))
+(if cdlatex-takeover-parenthesis
+    (progn
+      (define-key cdlatex-mode-map  "("         'cdlatex-pbb)
+      (define-key cdlatex-mode-map  "{"         'cdlatex-pbb)
+      (define-key cdlatex-mode-map  "["         'cdlatex-pbb)
+      (define-key cdlatex-mode-map  "|"         'cdlatex-pbb)
+      (define-key cdlatex-mode-map  "<"         'cdlatex-pbb)))
+(if cdlatex-takeover-subsuperscript
+    (progn
+      (define-key cdlatex-mode-map  "^"         'cdlatex-sub-superscript)
+      (define-key cdlatex-mode-map  "_"         'cdlatex-sub-superscript)))
 
 (define-key cdlatex-mode-map  "\t"        'cdlatex-tab)
 (define-key cdlatex-mode-map  "\C-c?"     'cdlatex-command-help)
