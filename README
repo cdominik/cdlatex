@@ -28,7 +28,7 @@ text development with LaTeX.  CDLaTeX is really about speed.  AUCTeX
 based system for inserting environments and macros - but while this is
 useful and general, it is sometimes slow to use.  CDLaTeX tries to be
 quick, with very few and easy to remember keys, and intelligent
-on-the-fly help.
+on-the-fly help. 
 
 1. ABBREVIATIONS.  
    -------------
