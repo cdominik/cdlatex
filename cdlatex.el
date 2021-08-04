@@ -1468,7 +1468,7 @@ zZ
     ("gat*"      "Insert a GATHER* environment template"
      "" cdlatex-environment ("gather*") t nil)
     ("spl"       "Insert SPLIT environment template"
-     "" cdlatex-environment ("split") t nil)
+     "" cdlatex-environment ("split") nil t)
     ("fla"       "Insert a FLALIGN environment template"
      "" cdlatex-environment ("flalign") t nil)
     ("fla*"      "Insert a FLALIGN* environment template"
