@@ -682,13 +682,10 @@ Entering cdlatex-mode calls the hook cdlatex-mode-hook.
                              (<= (prefix-numeric-value arg) 0))))
 
   ; Add or remove the menu, and run the hook
-  (if cdlatex-mode
-      (progn
-	(easy-menu-add cdlatex-mode-menu)
-	(run-hooks 'cdlatex-mode-hook)
-	(cdlatex-compute-tables))
-    (easy-menu-remove cdlatex-mode-menu)))
-    
+  (when cdlatex-mode
+    (run-hooks 'cdlatex-mode-hook)
+    (cdlatex-compute-tables))
+
 (or (assoc 'cdlatex-mode minor-mode-alist)
     (setq minor-mode-alist
           (cons '(cdlatex-mode " CDL") minor-mode-alist)))
