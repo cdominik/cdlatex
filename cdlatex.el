@@ -436,8 +436,8 @@ indicating the label types for which it should be true."
 
 (defcustom cdlatex-math-symbol-prefix ?`
   "Prefix key for `cdlatex-math-symbol'.
-This may be a character, a string readable with read-kbd-macro, or a
-lisp vector."
+This may be a character, a string readable with `read-kbd-macro',
+or a Lisp vector."
   :group 'cdlatex-math-support
   :type '(choice
 	  (character)
@@ -450,8 +450,8 @@ This is a list of key binding descriptions for different levels of
 math symbols.  First entry for level 1 etc.
 Each entry consists of a prefix key and a list of modifiers for the
 character.  The prefix key can be nil, or any of a character, a
-read-kbd-macro readable string or a vector.
-Examples: 
+'read-kbd-macro' readable string or a vector.
+Examples:
 `((nil alt))'                   bind `\\delta' to `A-d'.
 `((\"C-c C-f\"))'               bind `\\delta' to `C-c C-f d'.
 `((nil alt) (nil alt control))' bind `\\delta' to `A-d' and
@@ -495,7 +495,7 @@ functions and opperators."
 (defcustom cdlatex-math-modify-prefix ?'
   "Prefix key for `cdlatex-math-modify'.
 It can be a character, a string interpretable with `read-kbd-macro',
-or a lisp vector."
+or a Lisp vector."
   :group 'cdlatex-math-support
   :type '(choice
 	  (character)
@@ -505,7 +505,7 @@ or a lisp vector."
 (defcustom cdlatex-modify-backwards t
   "*Non-nil means, `cdlatex-math-modify' modifies char before point.
 Nil means, always insert only an empty modification form.  This is also
-the case if the character before point is white or some punctuation. "
+the case if the character before point is white or some punctuation."
   :group 'cdlatex-math-support
   :type 'boolean)
 
@@ -704,7 +704,7 @@ Entering cdlatex-mode calls the hook cdlatex-mode-hook.
 ;;; Functions that check out the surroundings
 
 (defun cdlatex-dollars-balanced-to-here (&optional from)
-  ;; Return t if the dollars are balanced between start of paragraph and point.
+  "Return t if the dollars are balanced between start of paragraph and point."
   (save-excursion
     (let ((answer t) (pos (point)))
       (if from
@@ -717,7 +717,7 @@ Entering cdlatex-mode calls the hook cdlatex-mode-hook.
       (setq answer answer))))
 
 (defun cdlatex-number-of-backslashes-is-odd ()
-  ;; Count backslashes before point and return t if number is odd.
+  "Count backslashes before point and return t if number is odd."
   (let ((odd nil))
     (save-excursion
       (while (equal (preceding-char) ?\\)
@@ -739,8 +739,8 @@ Entering cdlatex-mode calls the hook cdlatex-mode-hook.
 	(t nil)))
 
 (defun cdlatex-uniquify (alist &optional keep-list)
-  ;; Return a list of all elements in ALIST, but each car only once.
-  ;; Elements of KEEP-LIST are not removed even if duplicate.
+  "Return a list of all elements in ALIST, but each car only once.
+Elements of KEEP-LIST are not removed even if duplicate."
   (let (new elm)
     (while alist
       (setq elm (car alist)
@@ -752,7 +752,7 @@ Entering cdlatex-mode calls the hook cdlatex-mode-hook.
     new))
 
 (defun cdlatex-use-fonts ()
-  ;; Return t if we can and want to use fonts.
+  "Return t if we can and want to use fonts."
   (and window-system
        cdlatex-use-fonts
        (boundp 'font-lock-keyword-face)))
@@ -779,7 +779,7 @@ Entering cdlatex-mode calls the hook cdlatex-mode-hook.
       (insert paren))))
 
 (defun cdlatex-ensure-math ()
-  ;; Make sure we are in math
+  "Make sure we are in math"
   (unless (texmathp)
     (if cdlatex-use-dollar-to-ensure-math
         (cdlatex-dollar)
@@ -877,8 +877,8 @@ expect that more input can be put in.
 To do that, the cursor is moved according to the following rules:
 
 The cursor stops...
-- before closing brackets if preceding-char is any of -({[]})
-- after  closing brackets, but not if following-char is any of ({[_^
+- before closing brackets if 'preceding-char' is any of -({[]})
+- after  closing brackets, but not if 'following-char' is any of ({[_^
 - just after $, if the cursor was before that $.
 - at end of non-empty lines
 - at the beginning of empty lines
@@ -994,7 +994,7 @@ Sounds strange?  Try it out!"
 ;;; Cursor position after insertion of forms
 
 (defun cdlatex-position-cursor ()
-  ;; Search back to question mark, delete it, leave point there
+  "Search back to question mark, delete it, leave point there."
   (if (search-backward "\?" (- (point) 100) t)
       (delete-char 1)))
 
@@ -1092,16 +1092,16 @@ add two backslashes to the previous line if required."
   (let* ((env (car (car (reftex-what-environment t))))
 	 (envl (assoc env cdlatex-env-alist-comb)))
 
-    (if (not env) (error "No open environment at point."))
+    (if (not env) (error "No open environment at point"))
     (if (or (< (length envl) 3)
 	    (null (nth 2 envl))
 	    (and (stringp (nth 2 envl))
 		 (string= (nth 2 envl) "")))
-	(error "No item defined for %s environment." env))
+        (error "No item defined for %s environment" env))
     (cdlatex-environment env t)))
 
 (defun cdlatex-comment-at-point ()
-  ;; Return t if point is inside a TeX comment
+  "Return t if point is inside a TeX comment."
   (let ((end (point))
         (start (progn (beginning-of-line 1) (point))))
     (goto-char end)
@@ -1165,7 +1165,7 @@ math environment, you also get a pair of dollars."
     (if (or (not symbol)
 	    (not (stringp symbol))
 	    (equal symbol ""))
-	(error "No such math symbol %c on level %d" char level))
+        (error "No such math symbol %c on level %d" char level))
 
     (if (or (not (texmathp))
             (cdlatex-number-of-backslashes-is-odd))
@@ -1281,8 +1281,8 @@ constant `cdlatex-math-modify-alist'."
       (setq acc    (nth 2 ass))
       (setq rmdot  (nth 3 ass))
       (setq it     (nth 4 ass))
-      (if (not cmd) (error "No such modifier `%c' %s math mode." char
-			   (if inside-math "inside" "outside")))
+      (if (not cmd) (error "No such modifier `%c' %s math mode" char
+                           (if inside-math "inside" "outside")))
       (cond
        ((cdlatex-region-active-p)
 	(let ((beg (min (region-beginning) (region-end)))
@@ -1353,7 +1353,7 @@ constant `cdlatex-math-modify-alist'."
 ;;; And here is the help function for the symbol insertions stuff
 
 (defun cdlatex-turn-on-help (header level alist offset &optional sparse)
-  ;; Show help-window for alist
+  "Show 'help-window' for ALIST."
   (let ((cnt 0) (all-chars "")
         (flock (cdlatex-use-fonts)) this-char value)
     (if sparse
@@ -2100,7 +2100,7 @@ these variables via `cdlatex-add-to-label-alist'."
 
 
 (defun cdlatex-compute-tables ()
-  ;; Update tables not connected with ref and cite support
+  "Update tables not connected with ref and cite support."
 
   (setq cdlatex-env-alist-comb
         (cdlatex-uniquify
@@ -2209,7 +2209,7 @@ these variables via `cdlatex-add-to-label-alist'."
 
 (easy-menu-define 
  cdlatex-mode-menu cdlatex-mode-map
- "Menu used in CDLaTeX mode"
+ "Menu used in CDLaTeX mode."
  '("CDLTX"
    ["\\begin{...} \\label"   cdlatex-environment t]
    ["\\item \\label"         cdlatex-item t]
