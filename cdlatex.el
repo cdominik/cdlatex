@@ -634,7 +634,7 @@ automatic help when idle for more than this amount of time."
   (cdlatex-mode t))
 
 ;;;###autoload
-(defun cdlatex-mode (&optional arg)
+(define-minor-mode cdlatex-mode
   "Minor mode for editing scientific LaTeX documents.
 
 Here is a list of features: \\<cdlatex-mode-map>
@@ -688,29 +688,10 @@ displaying the available characters and their meanings.
 
 Under X, many functions will be available also in a menu on the menu bar.
 
-
-  (interactive "P")
-  (setq cdlatex-mode (not (or (and (null arg) cdlatex-mode)
-                             (<= (prefix-numeric-value arg) 0))))
-
-  ; Add or remove the menu, and run the hook
-  (if cdlatex-mode
-      (progn
-	(easy-menu-add cdlatex-mode-menu)
-	(run-hooks 'cdlatex-mode-hook)
-	(cdlatex-compute-tables))
-    (easy-menu-remove cdlatex-mode-menu)))
-    
-(or (assoc 'cdlatex-mode minor-mode-alist)
-    (setq minor-mode-alist
-          (cons '(cdlatex-mode " CDL") minor-mode-alist)))
-
-(or (assoc 'cdlatex-mode minor-mode-map-alist)
-    (setq minor-mode-map-alist
-          (cons (cons 'cdlatex-mode cdlatex-mode-map)
-                minor-mode-map-alist)))
-
 Entering `cdlatex-mode' calls the hook cdlatex-mode-hook."
+  :lighter " CDL"
+  (when cdlatex-mode
+    (cdlatex-compute-tables)))
 
 ;;; ===========================================================================
 ;;;
