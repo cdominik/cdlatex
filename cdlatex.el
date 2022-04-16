@@ -320,6 +320,7 @@
 
 (eval-when-compile (require 'cl-lib))
 (require 'texmathp)
+(require 'reftex)
 
 ;;; Begin of Configuration Section ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
