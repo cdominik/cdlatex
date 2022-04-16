@@ -4,6 +4,7 @@
 ;; Author: Carsten Dominik <carsten.dominik@gmail.com>
 ;; Keywords: tex
 ;; Version: 4.11
+;; Package-Requires: ((auctex "9.9"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -318,6 +319,7 @@
 ;;; Code:
 
 (eval-when-compile (require 'cl-lib))
+(require 'texmathp)
 
 ;;; Begin of Configuration Section ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -603,8 +605,6 @@ When executing `cdlatex-math-symbol' or `cdlatex-math-modify', display
 automatic help when idle for more than this amount of time."
   :group 'cdlatex-miscellaneous-configurations
   :type 'number)
-
-(require 'texmathp)
 
 ;;;============================================================================
 ;;;
