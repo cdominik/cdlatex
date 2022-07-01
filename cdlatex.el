@@ -618,9 +618,6 @@ automatic help when idle for more than this amount of time."
   (require 'finder)
   (finder-commentary "cdlatex.el"))
 
-(defconst cdlatex-version "4.6"
-  "Version string for CDLaTeX.")
-
 (defvar cdlatex-mode nil
   "Determines if CDLaTeX minor mode is active.")
 (make-variable-buffer-local 'cdlatex-mode)
