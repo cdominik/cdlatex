@@ -8,12 +8,12 @@
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
-;; GNUTHis file is free software: you can redistribute it and/or modify
+;; This file is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 
-;; cdlatex.el  is distributed in the hope that it will be useful,
+;; cdlatex.el is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
@@ -34,8 +34,8 @@
 ;; To turn on CDLaTeX Minor Mode for all LaTeX files, add one of the
 ;; following lines to your .emacs file:
 ;;
-;;   (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)   ; with AUCTeX LaTeX mode
-;;   (add-hook 'latex-mode-hook 'turn-on-cdlatex)   ; with Emacs latex mode
+;;   (add-hook 'LaTeX-mode-hook #'turn-on-cdlatex)   ; with AUCTeX LaTeX mode
+;;   (add-hook 'latex-mode-hook #'turn-on-cdlatex)   ; with Emacs latex mode
 ;;
 ;; For key bindings, see further down in this documentation.
 ;;
@@ -73,7 +73,7 @@
 ;;        template, text needs to be filled in at various places, which we
 ;;        call "points of interest".  You can use the TAB key to jump to
 ;;        the next point of interest in the template.  If there is an
-;;        active region, the region will be wrappend into the environment,
+;;        active region, the region will be wrapped into the environment,
 ;;        ignoring the template content.
 ;;
 ;;        For many frequently used LaTeX environments, abbreviations are
@@ -203,8 +203,8 @@
 ;;
 ;;    If you press `_' or `^' twice, the template inserted will be
 ;;    `_{\rm }' or `^{\rm }', respectively, to insert a roman
-;;    sub/super-script.  Style guides require that all sub and
-;;    superscipts that are descriptive (so not a mathematical or
+;;    sub/super-script.  Style guides require that all sub- and
+;;    superscripts that are descriptive (so not a mathematical or
 ;;    physical quantity themselves) need to be roman.  So $x_i$ is i
 ;;    is an index, but $x_{\rm max}$ to indicate the maximum value.  You
 ;;    can disable this behavior through the variable
@@ -370,7 +370,7 @@
 (defcustom cdlatex-command-alist nil
   "List of abbrev-like commands, available with keyword and TAB.
 See `cdlatex-command-alist-default' for examples.  This list only
-defines additons to the defaults.  For a full list of active commands,
+defines additions to the defaults.  For a full list of active commands,
 press \\[cdlatex-command-help].
 Each element of this list is again a list with the following items:
 0. KEYWORD     The key that has to be typed into the text.
@@ -422,7 +422,7 @@ in this variable will be added to the default definitions."
                         (text  :tag "template" :format "TEMPLATE\n%v" "")))))
 
 (defcustom cdlatex-insert-auto-labels-in-env-templates t
-  "*Non-nil means the environment templates CDLaTeX will contain labels.
+  "Non-nil means the environment templates CDLaTeX will contain labels.
 This variable may be set to t, nil, or a string of label type letters
 indicating the label types for which it should be true."
   :group 'cdlatex-making-and-inserting-labels
@@ -486,9 +486,9 @@ this key.  When the string contains a question mark, this is where the
 cursor will be positioned after insertion of the string into the buffer.
 See `cdlatex-math-symbol-alist-default' for an example.  Any entry defined
 here will replace the corresponding entry of the default list.  The
-defaults implement 3 levels of symbols so far: Level 1 for greek letters
+defaults implement 3 levels of symbols so far: Level 1 for Greek letters
 and standard symbols, level 2 for variations of level 1, and level 3 for
-functions and opperators."
+functions and operators."
   :group 'cdlatex-math-support
   :type '(repeat
           (list
@@ -506,7 +506,7 @@ or a Lisp vector."
           (sexp :value [] :tag "a lisp vector")))
 
 (defcustom cdlatex-modify-backwards t
-  "*Non-nil means, `cdlatex-math-modify' modifies char before point.
+  "Non-nil means, `cdlatex-math-modify' modifies char before point.
 Nil means, always insert only an empty modification form.  This is also
 the case if the character before point is white or some punctuation."
   :group 'cdlatex-math-support
@@ -538,12 +538,12 @@ Each element contains 6 items:
                 (boolean :tag "Italic correction"))))
 
 (defcustom cdlatex-make-sub-superscript-roman-if-pressed-twice nil
-  "*Non-nil means, pressing `^` or `_' twice inserts roman sub/superscript."
+  "Non-nil means, pressing `^` or `_' twice inserts roman sub/superscript."
   :group 'cdlatex-math-support
   :type 'boolean)
 
 (defcustom cdlatex-use-dollar-to-ensure-math t
-  "*Non-nil means, use $...$ to force a math mode setting where needed.
+  "Non-nil means, use $...$ to force a math mode setting where needed.
 When nil, use \\(...\\) instead."
   :group 'cdlatex-math-support
   :type '(boolean))
@@ -555,30 +555,30 @@ When nil, use \\(...\\) instead."
   :group 'cdlatex)
 
 (defcustom cdlatex-use-fonts t
-  "*Non-nil means, use fonts in label menu and on-the-fly help.
+  "Non-nil means, use fonts in label menu and on-the-fly help.
 Font-lock must be loaded as well to actually get fontified display."
   :group 'cdlatex-miscellaneous-configurations
   :type '(boolean))
 
 (defcustom cdlatex-takeover-parenthesis t
-  "*Non-nil means, cdlatex is allowed to take over the parenthesis insertion.
-THis means it will redefine the `(', `{', and `[' keys."
+  "Non-nil means, cdlatex is allowed to take over the parenthesis insertion.
+This means it will redefine the `(', `{', and `[' keys."
   :group 'cdlatex-miscellaneous-configurations
   :type '(boolean))
 
 (defcustom cdlatex-takeover-dollar t
-  "*Non-nil means, cdlatex is allowed to take over the $.
-THis means it will redefine the `$' keys."
+  "Non-nil means, cdlatex is allowed to take over the $.
+This means it will redefine the `$' keys."
   :group 'cdlatex-miscellaneous-configurations
   :type '(boolean))
 
 (defcustom cdlatex-takeover-subsuperscript t
-  "*Non-nil means, cdlatex is allowed to take over the ^ and _ keys."
+  "Non-nil means, cdlatex is allowed to take over the ^ and _ keys."
   :group 'cdlatex-miscellaneous-configurations
   :type '(boolean))
 
 (defcustom cdlatex-paired-parens "$[{"
-  "*String with the opening parens you want to have inserted paired.
+  "String with the opening parens you want to have inserted paired.
 The following parens are allowed here: `$([{|<'.
 I recommend to set this to '$[{' as these have syntactical meaning in
 TeX and are required to be paired.  TAB is a good way to move out of paired
@@ -587,14 +587,14 @@ parens."
   :type '(string :tag "Opening delimiters"))
 
 (defcustom cdlatex-simplify-sub-super-scripts t
-  "*Non-nil means, TAB will simplify sub- and superscripts at point.
+  "Non-nil means, TAB will simplify sub- and superscripts at point.
 When you use TAB to exit from a sub- or superscript which is a single
 letter, the parenthesis will be removed."
   :group 'cdlatex-miscellaneous-configurations
   :type '(boolean))
 
 (defcustom cdlatex-sub-super-scripts-outside-math-mode t
-  "*Non-nil means, inserting ^ or _ will add dollars outside math environment.
+  "Non-nil means, inserting ^ or _ will add dollars outside math environment.
 So in text mode surrounding dollars and braces will be added with `_' and `^'.
 When nil, `_' and `^' will just self-insert."
   :group 'cdlatex-miscellaneous-configurations
@@ -647,7 +647,7 @@ You can get a full list of these commands with
 \\[cdlatex-command-help].  For example, when you type `fr<TAB>',
 CDLaTeX will insert \\frac{}{}.
 
-When inserting templates like '\\frac{}{}', the cursor is
+When inserting templates like \\='\\frac{}{}\\=', the cursor is
 positioned properly.  Use \\[cdlatex-tab] to move through
 templates.  \\[cdlatex-tab] also kills unnecessary braces around
 subscripts and superscripts at point.
@@ -1544,7 +1544,7 @@ zZ
     ( ?v    "\\check"             nil        t   t   nil )
     ( ?u    "\\breve"             nil        t   t   nil )
     ( ?m    "\\mbox"              nil        t   nil nil )
-    ( ?t    "\\text"              nil        t   nil nil )    
+    ( ?t    "\\text"              nil        t   nil nil )
     ( ?c    "\\mathcal"           nil        t   nil nil )
     ( ?r    "\\mathrm"            "\\textrm" t   nil nil )
     ( ?i    "\\mathit"            "\\textit" t   nil nil )
