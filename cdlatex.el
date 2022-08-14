@@ -621,8 +621,6 @@ automatic help when idle for more than this amount of time."
   "Determines if CDLaTeX minor mode is active.")
 (make-variable-buffer-local 'cdlatex-mode)
 
-(defvar cdlatex-mode-map (make-sparse-keymap)
-  "Keymap for CDLaTeX minor mode.")
 (defun cdlatex-get-kbd-vector (obj)
   "Ensure OBJ can be used as a keybinding."
   (cond ((vectorp obj) obj)
