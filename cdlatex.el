@@ -850,7 +850,10 @@ When pressed twice, make the sub/superscript roman."
   (interactive)
   (if (and cdlatex-make-sub-superscript-roman-if-pressed-twice
            (equal this-command last-command))
-      (insert "\\rm ")
+      (progn
+        ;; (insert "\\rm ")
+        (insert "\\mathrm{}")
+        (backward-char 1))
     (if (cdlatex-number-of-backslashes-is-odd)
         ;; Quoted
         (insert (event-basic-type last-command-event))
