@@ -1389,7 +1389,7 @@ constant `cdlatex-math-modify-alist'."
                  ((not inside-math) (forward-char 1))
                  (t (register-to-point ?x)
                     (forward-char -1)
-                    (if (and rmdot (looking-at "[ij]"))
+                    (if (and rmdot (let (case-fold-search) (looking-at "[ij]")))
                         (progn (insert "\\")
                                (forward-char 1)
                                (insert "math")
