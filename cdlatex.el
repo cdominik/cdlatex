@@ -129,7 +129,7 @@
 ;;    backquote character several times before pressing the letter.  For
 ;;    example, typing "`d" inserts "\delta" (level 1), and typing "``d"
 ;;    inserts "\partial" (level 2).  Similarly, "`e" inserts "\epsilon"
-;;    and "``e" inserts "\vareppsilon".
+;;    and "``e" inserts "\varepsilon".
 ;;
 ;;    On each level, on-thy-fly help will pop up automatically if you
 ;;    hesitate to press the next key.  The help screen is a window which
