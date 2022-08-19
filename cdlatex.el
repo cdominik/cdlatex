@@ -3,7 +3,7 @@
 ;;
 ;; Author: Carsten Dominik <carsten.dominik@gmail.com>
 ;; Keywords: tex
-;; Version: 4.12
+;; Version: 4.13
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -110,6 +110,9 @@
 ;;        inserted.  For example in the `\frac{}{}' template, it will
 ;;        move you from the first argument to the second and then out of
 ;;        the second.  For a list of available templates, type `C-c ?'.
+;;        As a special case, the left-right parenthesis combinations can
+;;        also be applied after writing the content by selecting the
+;;        content and typing '( or '[ or '{ or '< or '| .
 ;;
 ;; 2. MATHEMATICAL SYMBOLS
 ;;    --------------------
@@ -172,6 +175,8 @@
 ;;      and positions the cursor inside.
 ;;    - when a numeric prefix argument is supplied, the command acts on
 ;;      whole words before the cursor.
+;;    - Furthermore, if there is an active region, the change will apply
+;;      to the content of that region.
 ;;
 ;;    In order to insert a normal quote, you can press the quote
 ;;    character twice.  Also, if the key character is not associated with
@@ -202,7 +207,7 @@
 ;;    inserts "$10^{34}$".
 ;;
 ;;    If you press `_' or `^' twice, the template inserted will be
-;;    `_{\rm }' or `^{\rm }', respectively, to insert a roman
+;;    `_{\mathrm{}}' or `^{\mathrm }', respectively, to insert a roman
 ;;    sub/super-script.  Style guides require that all sub- and
 ;;    superscripts that are descriptive (so not a mathematical or
 ;;    physical quantity themselves) need to be roman.  So $x_i$ is i
@@ -536,7 +541,7 @@ Each element contains 6 items:
                 (boolean :tag "Remove dot in i/j")
                 (boolean :tag "Italic correction"))))
 
-(defcustom cdlatex-make-sub-superscript-roman-if-pressed-twice nil
+(defcustom cdlatex-make-sub-superscript-roman-if-pressed-twice t
   "Non-nil means, pressing `^' or `_' twice inserts roman sub/superscript."
   :group 'cdlatex-math-support
   :type 'boolean)
@@ -1258,9 +1263,12 @@ with a math accent or a style.
 If the character before point is white space, an empty modifying form
 is inserted and the cursor positioned properly.
 If the object before point looks like word, this macro modifies the last
-character of it.
-All this happens only, when the cursor is actually inside a LaTeX math
-environment.  In normal text, it does just a self-insert.
+character of it.  The math-related changes happen only when the cursor
+is actually inside a LaTeX math environment.
+Some of the modification characters denote font style changes like bold
+or italic.  These also work in text mode, on the word before point or,
+if applicable, the active region.
+  In normal text, it does just a self-insert.
 The accent and style commands and their properties are defined in the
 constant `cdlatex-math-modify-alist'."
   (interactive "P")
@@ -1268,7 +1276,8 @@ constant `cdlatex-math-modify-alist'."
 
     (let ((inside-math (cdlatex--texmathp))
           (win (selected-window))
-          char (help-is-on nil) ass acc rmdot it cmd extrabrac)
+          char (help-is-on nil) ass acc rmdot it cmd extrabrac
+          before after)
       (catch 'exit1
         (save-window-excursion
           (while t
@@ -1315,6 +1324,8 @@ constant `cdlatex-math-modify-alist'."
       (setq it     (nth 4 ass))
       (if (not cmd) (error "No such modifier `%c' %s math mode" char
                            (if inside-math "inside" "outside")))
+      (if (string-match "\\(.*\\)\\?\\(.*\\)" cmd)
+          (setq before (match-string 1 cmd) after (match-string 2 cmd)))
       (cond
        ((cdlatex-region-active-p)
         (let ((beg (min (region-beginning) (region-end)))
@@ -1322,30 +1333,40 @@ constant `cdlatex-math-modify-alist'."
           (goto-char end)
           (point-to-register ?x)
           (goto-char beg)
-          (insert "{")
-          (if acc (forward-char -1))
-          (insert cmd)
-          (if (not acc) (insert " "))
+          (if before
+              (insert before)
+            (insert "{")
+            (if acc (forward-char -1))
+            (insert cmd)
+            (if (not acc) (insert " ")))
           (register-to-point ?x)
-          (insert "}")))
+          (if after
+              (insert after)
+            (insert "}"))))
        (arg
         (point-to-register ?x)
         (backward-word arg)
-        (insert "{")
-        (if acc (forward-char -1))
-        (insert cmd)
-        (if (not acc) (insert " "))
+        (if before
+            (insert before)
+          (insert "{")
+          (if acc (forward-char -1))
+          (insert cmd)
+          (if (not acc) (insert " ")))
         (register-to-point ?x)
-        (insert "}"))
+        (if after
+            (insert after)
+          (insert "}")))
        ((or (bolp)
             (not cdlatex-modify-backwards)
             (memq (preceding-char) '(?\  ?$ ?- ?{ ?\( )))
         ;; Just insert empty form and position cursor
-        (if acc
-            (insert cmd "{?")
-          (insert "{" cmd " ?"))
-        (if it (insert "\\/"))
-        (insert "}")
+        (if (string-match "\\?" cmd)
+            (insert cmd)
+          (if acc
+              (insert cmd "{?")
+            (insert "{" cmd " ?"))
+          (if it (insert "\\/"))
+          (insert "}"))
         (search-backward "?")
         (delete-char 1))
        (t
@@ -1423,7 +1444,9 @@ zZ
          (setq value ""))
        ( t
          (setq value (nth level (assoc this-char alist)))
-         (if (not value) (setq value ""))))
+         (if (not value) (setq value ""))
+         (if (string-match "\\(.*?\\) \\? \\(.*\\)" value)
+             (setq value (concat (match-string 1 value) (match-string 2 value))))))
       (setq this-char (char-to-string this-char)
             value (if (> (length value) 15)
                       (concat (substring value 0 13) "..")
@@ -1571,7 +1594,7 @@ zZ
     ( ?\-   "\\bar"               nil        t   t   nil )
     ( ?T    "\\overline"          nil        t   nil nil )
     ( ?\_   "\\underline"         nil        t   nil nil )
-    ( ?\{   "\\overbrace"         nil        t   nil nil )
+    ( ?]    "\\overbrace"         nil        t   nil nil )
     ( ?\}   "\\underbrace"        nil        t   nil nil )
     ( ?\>   "\\vec"               nil        t   t   nil )
     ( ?/    "\\grave"             nil        t   t   nil )
@@ -1592,6 +1615,11 @@ zZ
     ( ?1    "\\displaystyle"      nil        nil nil nil )
     ( ?2    "\\scriptstyle"       nil        nil nil nil )
     ( ?3    "\\scriptscriptstyle" nil        nil nil nil )
+    ( ?(    "\\left( ? \\right)"  nil        nil nil nil )
+    ( ?[    "\\left[ ? \\right]"  nil        nil nil nil )
+    ( ?{    "\\left\\{ ? \\right\\}" nil     nil nil nil )
+    ( ?<    "\\left< ? \\right>"  nil        nil nil nil )
+    ( ?|    "\\left| ? \\right|"  nil        nil nil nil )
     )
   "Default for `cdlatex-math-modify-alist'.")
 

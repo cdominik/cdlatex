@@ -9,13 +9,14 @@ To turn CDLaTeX Minor Mode on and off in a particular buffer, use
 To turn on CDLaTeX Minor Mode for all LaTeX files, add one of the
 following lines to your .emacs file:
 
-  (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)   ; with AUCTeX LaTeX mode
-  (add-hook 'latex-mode-hook 'turn-on-cdlatex)   ; with Emacs latex mode
+  (add-hook 'LaTeX-mode-hook #'turn-on-cdlatex)   ; with AUCTeX LaTeX mode
+  (add-hook 'latex-mode-hook #'turn-on-cdlatex)   ; with Emacs latex mode
 
 For key bindings, see further down in this documentation.
 
-CDLaTeX requires texmathp.el which is distributed with AUCTeX.
-Starting with Emacs 21.3, texmathp.el will be part of Emacs.
+CDLaTeX requires texmathp.el (which is distributed with AUCTeX) to
+auto-insert $...$ when needed, so we recommend you install AUCTeX to get
+this functionality.
 
 --------------------------------------------------------------------------
 
@@ -28,9 +29,9 @@ text development with LaTeX.  CDLaTeX is really about speed.  AUCTeX
 based system for inserting environments and macros - but while this is
 useful and general, it is sometimes slow to use.  CDLaTeX tries to be
 quick, with very few and easy to remember keys, and intelligent
-on-the-fly help. 
+on-the-fly help.
 
-1. ABBREVIATIONS.  
+1. ABBREVIATIONS.
    -------------
    CDLaTeX has an abbrev-like mechanism to insert full LaTeX
    environments and other templates into the buffer.  Abbreviation
@@ -48,7 +49,7 @@ on-the-fly help.
        template, text needs to be filled in at various places, which we
        call "points of interest".  You can use the TAB key to jump to
        the next point of interest in the template.  If there is an
-       active region, the region will be wrappend into the environment,
+       active region, the region will be wrapped into the environment,
        ignoring the template content.
 
        For many frequently used LaTeX environments, abbreviations are
@@ -70,7 +71,7 @@ on-the-fly help.
        environment it inserts "\item\label{item:25}" and in an eqnarray
        environment, it inserts "\label{eq:25} \n & &".  When
        appropriate, newlines are inserted, and the previous item is also
-       closed with "\\".  `cdlatex-item' can also be invoked with the 
+       closed with "\\".  `cdlatex-item' can also be invoked with the
        abbreviation "it<TAB>".
 
    1b. MATH TEMPLATES
@@ -85,6 +86,9 @@ on-the-fly help.
        inserted.  For example in the `\frac{}{}' template, it will
        move you from the first argument to the second and then out of
        the second.  For a list of available templates, type `C-c ?'.
+       As a special case, the left-right parenthesis combinations can
+       also be applied after writing the content by selecting the
+       content and typing '( or '[ or '{ or '< or '| .
 
 2. MATHEMATICAL SYMBOLS
    --------------------
@@ -101,9 +105,9 @@ on-the-fly help.
    backquote character several times before pressing the letter.  For
    example, typing "`d" inserts "\delta" (level 1), and typing "``d"
    inserts "\partial" (level 2).  Similarly, "`e" inserts "\epsilon"
-   and "``e" inserts "\varepsilon".
+   and "``e" inserts "\vareppsilon".
 
-   On each level, on-the-fly help will pop up automatically if you
+   On each level, on-thy-fly help will pop up automatically if you
    hesitate to press the next key.  The help screen is a window which
    lists all math macros available on the current level.  Initially,
    when you type slowly, this window will pop up each time you press
@@ -147,6 +151,8 @@ on-the-fly help.
      and positions the cursor inside.
    - when a numeric prefix argument is supplied, the command acts on
      whole words before the cursor.
+   - Furthermore, if there is an active region, the change will apply
+     to the content of that region.
 
    In order to insert a normal quote, you can press the quote
    character twice.  Also, if the key character is not associated with
@@ -177,9 +183,9 @@ on-the-fly help.
    inserts "$10^{34}$".
 
    If you press `_' or `^' twice, the template inserted will be
-   `_{\rm }' or `^{\rm }', respectively, to insert a roman
-   sub/super-script.  Style guides require that all sub and
-   superscipts that are descriptive (so not a mathematical or
+   `_{\mathrm{}}' or `^{\mathrm }', respectively, to insert a roman
+   sub/super-script.  Style guides require that all sub- and
+   superscripts that are descriptive (so not a mathematical or
    physical quantity themselves) need to be roman.  So $x_i$ is i
    is an index, but $x_{\rm max}$ to indicate the maximum value.  You
    can disable this behavior through the variable
