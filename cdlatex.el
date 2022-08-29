@@ -1276,6 +1276,7 @@ constant `cdlatex-math-modify-alist'."
 
     (let ((inside-math (cdlatex--texmathp))
           (win (selected-window))
+          (savedpos (make-marker))
           char (help-is-on nil) ass acc rmdot it cmd extrabrac
           before after)
       (catch 'exit1
@@ -1331,7 +1332,7 @@ constant `cdlatex-math-modify-alist'."
         (let ((beg (min (region-beginning) (region-end)))
               (end (max (region-beginning) (region-end))))
           (goto-char end)
-          (point-to-register ?x)
+          (move-marker savedpos (point))
           (goto-char beg)
           (if before
               (insert before)
@@ -1339,12 +1340,12 @@ constant `cdlatex-math-modify-alist'."
             (if acc (forward-char -1))
             (insert cmd)
             (if (not acc) (insert " ")))
-          (register-to-point ?x)
+          (goto-char savedpos)
           (if after
               (insert after)
             (insert "}"))))
        (arg
-        (point-to-register ?x)
+        (move-marker savedpos (point))
         (backward-word arg)
         (if before
             (insert before)
@@ -1352,7 +1353,7 @@ constant `cdlatex-math-modify-alist'."
           (if acc (forward-char -1))
           (insert cmd)
           (if (not acc) (insert " ")))
-        (register-to-point ?x)
+        (goto-char savedpos)
         (if after
             (insert after)
           (insert "}")))
@@ -1371,7 +1372,7 @@ constant `cdlatex-math-modify-alist'."
         (delete-char 1))
        (t
         ;; Modify preceding character or word
-        (point-to-register ?x)
+        (move-marker savedpos (point))
         (if (= (preceding-char) ?\})
             ;; its a group
             (progn (setq extrabrac nil)
@@ -1387,20 +1388,20 @@ constant `cdlatex-math-modify-alist'."
                 (cond
                  ((= (following-char) ?\\))
                  ((not inside-math) (forward-char 1))
-                 (t (register-to-point ?x)
+                 (t (goto-char savedpos)
                     (forward-char -1)
                     (if (and rmdot (let (case-fold-search) (looking-at "[ij]")))
                         (progn (insert "\\")
                                (forward-char 1)
                                (insert "math")
-                               (point-to-register ?x)
+                               (move-marker savedpos (point))
                                (forward-char -6))))))
             (setq extrabrac t)))
         (if extrabrac (progn (insert "{")
                              (if acc (forward-char -1))))
         (insert cmd)
         (if (not acc) (insert " "))
-        (register-to-point ?x)
+        (goto-char (savedpos))
         (if extrabrac (insert "}")))))))
 
 ;; And here is the help function for the symbol insertions stuff
