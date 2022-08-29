@@ -1401,7 +1401,7 @@ constant `cdlatex-math-modify-alist'."
                              (if acc (forward-char -1))))
         (insert cmd)
         (if (not acc) (insert " "))
-        (goto-char (savedpos))
+        (goto-char savedpos)
         (if extrabrac (insert "}")))))))
 
 ;; And here is the help function for the symbol insertions stuff
