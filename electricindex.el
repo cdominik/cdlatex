@@ -94,12 +94,11 @@ Here is a list of features: \\<electricindex-mode-map>
 Entering `electricindex-mode' calls the hook electricindex-mode-hook."
   :lighter " EI")
 
-(defalias 'electricindex--texmathp
-  (if (fboundp 'texmathp) #'texmathp
-    ;; FIXME: Maybe we could do better, but why bother: the users who want it
-    ;; can install AUCTeX.  Tho maybe we should move texmathp into its
-    ;; own package so it can be used even when AUCTeX is not
-    ;; installed/activated.
+(defun electricindex-active-here ()
+  (if (eq major-mode 'latex-mode)
+      (if (fboundp 'texmathp)
+          (texmathp)
+        t)
     t))
 
 ;;; ===========================================================================
@@ -108,7 +107,7 @@ Entering `electricindex-mode' calls the hook electricindex-mode-hook."
 (defun electricindex-digit ()
   "Insert digit, maybe as an index to a quantity in math environment."
   (interactive)
-  (if (not (electricindex--texmathp))
+  (if (not (electricindex-active-here))
       (self-insert-command 1)
     (let ((digit (char-to-string (event-basic-type last-command-event))))
       (if (looking-back "[a-zA-Z]" (1- (point)))
