@@ -119,9 +119,9 @@ Entering `electricindex-mode' calls the hook electricindex-mode-hook."
               (insert "{")
               (forward-char 1)
               (insert digit "}")
-              (if (looking-at "")
+              (if (looking-at " ")
                   (forward-char 1)
-                (insert "")))
+                (insert " ")))
           (if (looking-back "_{\\([0-9]+\\)} ?" (max (- (point) 10) (point-min)))
               (save-excursion
                 (goto-char (match-end 1))
