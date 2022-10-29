@@ -3,7 +3,7 @@
 ;;
 ;; Author: Carsten Dominik <carsten.dominik@gmail.com>
 ;; Keywords: tex
-;; Version: 4.14
+;; Version: 4.14.1
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -1590,12 +1590,13 @@ zZ
     ( ?\:   "\\ddot"              nil        t   t   nil )
     ( ?\~   "\\tilde"             nil        t   t   nil )
     ( ?N    "\\widetilde"         nil        t   t   nil )
+    ( ?o    "\\mathring"          nil        t   t   nil )
     ( ?^    "\\hat"               nil        t   t   nil )
     ( ?H    "\\widehat"           nil        t   t   nil )
     ( ?\-   "\\bar"               nil        t   t   nil )
     ( ?T    "\\overline"          nil        t   nil nil )
     ( ?\_   "\\underline"         nil        t   nil nil )
-    ( ?\]    "\\overbrace"         nil        t   nil nil )
+    ( ?\]   "\\overbrace"         nil        t   nil nil )
     ( ?\}   "\\underbrace"        nil        t   nil nil )
     ( ?\>   "\\vec"               nil        t   t   nil )
     ( ?/    "\\grave"             nil        t   t   nil )
