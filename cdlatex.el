@@ -3,7 +3,7 @@
 ;;
 ;; Author: Carsten Dominik <carsten.dominik@gmail.com>
 ;; Keywords: tex
-;; Version: 4.14
+;; Version: 4.15
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -196,6 +196,9 @@
 ;;    and the cursor positioned between them.  You can configure which
 ;;    delimiter are inserted pairwise by configuring the variable
 ;;    `cdlatex-paired-parens'.
+;;
+;;    If the region is active when you press $, the region will be
+;;    bracketed by a pair of $ characters.
 ;;
 ;;    Also, the keys `_' and `^' will insert "_{}" and "^{}",
 ;;    respectively, and, if necessary, also a pair of dollar signs to
@@ -823,6 +826,12 @@ Elements of KEEP-LIST are not removed even if duplicate."
 With ARG, insert pair of double dollars."
   (interactive "P")
   (cond
+   ((region-active-p)
+    (let ((s (region-beginning)) (e (region-end)))
+      (goto-char s)
+      (insert "$")
+      (goto-char (1+ e))
+      (insert "$")))
    ((cdlatex-number-of-backslashes-is-odd)
     (insert "$"))
    ((cdlatex--texmathp)
@@ -856,7 +865,6 @@ When pressed twice, make the sub/superscript roman."
   (if (and cdlatex-make-sub-superscript-roman-if-pressed-twice
            (equal this-command last-command))
       (progn
-        ;; (insert "\\rm ")
         (insert "\\mathrm{}")
         (backward-char 1))
     (if (cdlatex-number-of-backslashes-is-odd)
@@ -1595,7 +1603,7 @@ zZ
     ( ?\-   "\\bar"               nil        t   t   nil )
     ( ?T    "\\overline"          nil        t   nil nil )
     ( ?\_   "\\underline"         nil        t   nil nil )
-    ( ?\]    "\\overbrace"         nil        t   nil nil )
+    ( ?\]   "\\overbrace"         nil        t   nil nil )
     ( ?\}   "\\underbrace"        nil        t   nil nil )
     ( ?\>   "\\vec"               nil        t   t   nil )
     ( ?/    "\\grave"             nil        t   t   nil )
@@ -1616,9 +1624,9 @@ zZ
     ( ?1    "\\displaystyle"      nil        nil nil nil )
     ( ?2    "\\scriptstyle"       nil        nil nil nil )
     ( ?3    "\\scriptscriptstyle" nil        nil nil nil )
-    ( ?\(    "\\left( ? \\right)"  nil        nil nil nil )
-    ( ?\[    "\\left[ ? \\right]"  nil        nil nil nil )
-    ( ?\{    "\\left\\{ ? \\right\\}" nil     nil nil nil )
+    ( ?\(   "\\left( ? \\right)"  nil        nil nil nil )
+    ( ?\[   "\\left[ ? \\right]"  nil        nil nil nil )
+    ( ?\{   "\\left\\{ ? \\right\\}" nil     nil nil nil )
     ( ?<    "\\left< ? \\right>"  nil        nil nil nil )
     ( ?|    "\\left| ? \\right|"  nil        nil nil nil )
     )
