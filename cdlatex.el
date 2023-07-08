@@ -1060,7 +1060,7 @@ With a non-nil ARG, or a prefix argument, run texdoc instead."
 If the environment is not found in the list, a \\begin \\end pair is
 inserted.  Any keywords AUTOLABEL will be replaced by an automatic label
 statement.  Any keywords AUTOFILE will prompt the user for a file name
-\(with completion) and insert that file names.  If a template starts with
+\(with completion) and insert that file name.  If a template starts with
 \"\\\\\", the function will make sure that a double backslash occurs before
 the template.  This is mainly useful for \"items\" of environments, where
 \"\\\\\" is often needed as separator."
