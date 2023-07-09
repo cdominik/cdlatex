@@ -1,114 +1,69 @@
-;;; electricindex.el --- Fast digit index insertion -*- lexical-binding: t; -*-
-;; Copyright (c) 2022  Free Software Foundation, Inc.
-;;
-;; Author: Carsten Dominik <carsten.dominik@gmail.com>
-;; Keywords: tex
-;; Version: 1.0
-;;
-;; This file is not part of GNU Emacs.
-;;
-;; This file is free software: you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation, either version 3 of the License, or
-;; (at your option) any later version.
 
-;; electricindex.el is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-
-;; You should have received a copy of the GNU General Public License
-;; along with electricindex.el. If not, see <http://www.gnu.org/licenses/>.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;;; Commentary:
-;;
-;; Electricindex is a minor mode supporting fast digit index insertation in
-;; LaTeX math. For example typing  x 1 2  will insert x_{12}. It is an
-;; independent minor mode that is distributed with the cdlatex package.
-;;
-;; To turn Electricindex Minor Mode on and off in a particular buffer, use
-;; `M-x electricindex-mode'.
-;;
-;; To turn on Electricindex Minor Mode for all LaTeX files, add one of the
-;; following lines to your .emacs file:
-;;
-;;   (add-hook 'latex-mode-hook #'turn-on-electricindex)
-;;
-;; This index insertion will only work when the cursor is in a LaTeX math
-;; environment, based on (texmathp). If texmathp is not available, math
-;; math-mode will be assumed.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;;;;;;
-
-;;; Code:
-
-;;; Begin of Configuration Section ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Configuration Variables and User Options for Electricindex ------------------
-
-(defgroup electricindex nil
-  "LaTeX label and citation support."
-  :tag "Electricindex"
+(defgroup cdlatex-electricindex nil
+  "LaTeX electric digit indices."
+  :tag "cdlatex-electricindex"
   :link '(url-link :tag "Home Page" "https://github.com/cdominik/cdlatex")
-  :prefix "electricindex-"
+  :prefix "cdlatex-electricindex-"
   :group 'tex)
 
-;;;============================================================================
-;;;
-;;; Define the formal stuff for a minor mode named Electricindex.
-;;;
+(defvar cdlatex-electricindex-mode nil
+  "Determines if cdlatex-electricindex minor mode is active.")
+(make-variable-buffer-local 'cdlatex-electricindex-mode)
 
-(defvar electricindex-mode nil
-  "Determines if Electricindex minor mode is active.")
-(make-variable-buffer-local 'electricindex-mode)
-
-(defvar electricindex-mode-map
+(defvar cdlatex-electricindex-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map  "1"        #'electricindex-digit)
-    (define-key map  "2"        #'electricindex-digit)
-    (define-key map  "3"        #'electricindex-digit)
-    (define-key map  "4"        #'electricindex-digit)
-    (define-key map  "5"        #'electricindex-digit)
-    (define-key map  "6"        #'electricindex-digit)
-    (define-key map  "7"        #'electricindex-digit)
-    (define-key map  "8"        #'electricindex-digit)
-    (define-key map  "9"        #'electricindex-digit)
-    (define-key map  "0"        #'electricindex-digit)
+    (define-key map  "1"        #'cdlatex-electricindex-digit)
+    (define-key map  "2"        #'cdlatex-electricindex-digit)
+    (define-key map  "3"        #'cdlatex-electricindex-digit)
+    (define-key map  "4"        #'cdlatex-electricindex-digit)
+    (define-key map  "5"        #'cdlatex-electricindex-digit)
+    (define-key map  "6"        #'cdlatex-electricindex-digit)
+    (define-key map  "7"        #'cdlatex-electricindex-digit)
+    (define-key map  "8"        #'cdlatex-electricindex-digit)
+    (define-key map  "9"        #'cdlatex-electricindex-digit)
+    (define-key map  "0"        #'cdlatex-electricindex-digit)
     map)
-  "Keymap for Electricindex minor mode.")
+  "Keymap for cdlatex-electricindex minor mode.")
 
 ;;;###autoload
-(defun turn-on-electricindex ()
-  "Turn on Electricindex minor mode."
-  (electricindex-mode t))
+(defun turn-on-cdlatex-electricindex ()
+  "Turn on cdlatex-electricindex minor mode."
+  (cdlatex-electricindex-mode t))
 
 ;;;###autoload
-(define-minor-mode electricindex-mode
+(define-minor-mode cdlatex-electricindex-mode
   "Minor mode for electric insertion of numbered indixes.
 
-Here is a list of features: \\<electricindex-mode-map>
+cdlatex-electricindex is a minor mode supporting fast digit index
+insertation in LaTeX math. For example typing x 1 2 will insert
+x_{12}.
 
-Entering `electricindex-mode' calls the hook electricindex-mode-hook."
+To turn cdlatex-electricindex Minor Mode on and off in a
+particular buffer, use `M-x cdlatex-electricindex-mode'.
+
+To turn on cdlatex-electricindex Minor Mode for all LaTeX files,
+add one of the following lines to your .emacs file:
+
+    (add-hook 'latex-mode-hook #'turn-on-cdlatex-electricindex)
+
+This index insertion will only work when the cursor is in a LaTeX
+math environment, based on (texmathp). If texmathp is not
+available, math math-mode will be assumed.
+
+Entering `cdlatex-electricindex-mode' calls the hook
+`cdlatex-electricindex-mode-hook'."
   :lighter " EI")
 
-(defun electricindex-active-here ()
+(defun cdlatex-electricindex-active-here ()
   (if (eq major-mode 'latex-mode)
       (if (fboundp 'texmathp)
           (texmathp)
         t)
     t))
-
-;;; ===========================================================================
-;;;
-
-(defun electricindex-digit ()
+(defun cdlatex-electricindex-digit ()
   "Insert digit, maybe as an index to a quantity in math environment."
   (interactive)
-  (if (not (electricindex-active-here))
+  (if (not (cdlatex-electricindex-active-here))
       (self-insert-command 1)
     (let ((digit (char-to-string (event-basic-type last-command-event))))
       (if (looking-back "[a-zA-Z]" (1- (point)))
@@ -123,14 +78,10 @@ Entering `electricindex-mode' calls the hook electricindex-mode-hook."
               (if (looking-at " ")
                   (forward-char 1)
                 (insert " ")))
-          (if (looking-back "_{\\([0-9]+\\)} ?" (max (- (point) 10) (point-min)))
+          (if (looking-back "_{\\([0-9]+\\)} ?"
+                            (max (- (point) 10) (point-min)))
               (save-excursion
                 (goto-char (match-end 1))
                 (insert digit))
             (self-insert-command 1)))))))
 
-(provide 'electricindex)
-
-;;;============================================================================
-
-;;; electricindex.el ends here
