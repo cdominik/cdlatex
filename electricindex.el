@@ -3,7 +3,7 @@
 ;;
 ;; Author: Carsten Dominik <carsten.dominik@gmail.com>
 ;; Keywords: tex
-;; Version: 0.1
+;; Version: 1.0
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -25,7 +25,8 @@
 ;;; Commentary:
 ;;
 ;; Electricindex is a minor mode supporting fast digit index insertation in
-;; LaTeX math. For example typing  x 1 2  will insert x_{12}.
+;; LaTeX math. For example typing  x 1 2  will insert x_{12}. It is an
+;; independent minor mode that is distributed with the cdlatex package.
 ;;
 ;; To turn Electricindex Minor Mode on and off in a particular buffer, use
 ;; `M-x electricindex-mode'.
@@ -52,7 +53,7 @@
 (defgroup electricindex nil
   "LaTeX label and citation support."
   :tag "Electricindex"
-  :link '(url-link :tag "Home Page" "http://zon.astro.uva.nl/~dominik/Tools/")
+  :link '(url-link :tag "Home Page" "https://github.com/cdominik/cdlatex")
   :prefix "electricindex-"
   :group 'tex)
 
