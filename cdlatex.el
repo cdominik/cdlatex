@@ -3,7 +3,7 @@
 ;;
 ;; Author: Carsten Dominik <carsten.dominik@gmail.com>
 ;; Keywords: tex
-;; Version: 4.15
+;; Version: 4.16
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -1603,6 +1603,7 @@ zZ
     ( ?\:   "\\ddot"              nil        t   t   nil )
     ( ?\~   "\\tilde"             nil        t   t   nil )
     ( ?N    "\\widetilde"         nil        t   t   nil )
+    ( ?o    "\\mathring"          nil        t   t   nil )
     ( ?^    "\\hat"               nil        t   t   nil )
     ( ?H    "\\widehat"           nil        t   t   nil )
     ( ?\-   "\\bar"               nil        t   t   nil )
