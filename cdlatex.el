@@ -1072,10 +1072,10 @@ the template.  This is mainly useful for \"items\" of environments, where
           template prefix)
       (if (not env)
           (setq env (completing-read "Environment: " cdlatex-env-alist-comb nil nil "")))
-      (if (looking-back "^[ \t]*" (point-at-bol))
-          (setq prefix (match-string 0))
-        (setq prefix "")
-        (newline))
+      (if (looking-back "^\\([ \t]*\\)\\([^ \t].*\\)?" (point-at-bol))
+          (progn
+            (setq prefix (match-string 1))
+            (if (match-end 2) (progn (newline) (insert prefix)))))
       (setq begpos (point))
       (if (try-completion env cdlatex-env-alist-comb)
           (progn
