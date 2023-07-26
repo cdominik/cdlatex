@@ -2202,9 +2202,8 @@ and after changes to these variables via
 
   ;; find out how many levels are needed for the math symbol stuff
   (let ((maxlev 0) (list cdlatex-math-symbol-alist-comb))
-    (while (> (length list) 0)
-      (setq maxlev (max maxlev (length (nth 0 list)))
-            list (cdr list)))
+    (while list
+      (setq maxlev (max maxlev (length (pop list)))))
     (setq cdlatex-math-symbol-no-of-levels (1- maxlev)))
 
   ;; The direct key bindings.
