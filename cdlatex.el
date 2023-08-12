@@ -3,7 +3,7 @@
 ;;
 ;; Author: Carsten Dominik <carsten.dominik@gmail.com>
 ;; Keywords: tex
-;; Version: 4.16
+;; Version: 4.17
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -2202,11 +2202,8 @@ and after changes to these variables via
                  cdlatex-math-modify-alist-default)))
 
   ;; find out how many levels are needed for the math symbol stuff
-  (let ((maxlev 0) (list cdlatex-math-symbol-alist-comb))
-    (while (pop list)
-      (setq maxlev (max maxlev (length (nth 1 list)))
-            list (cdr list)))
-    (setq cdlatex-math-symbol-no-of-levels (1- maxlev)))
+  (setq cdlatex-math-symbol-no-of-levels
+        (1- (apply 'max (mapcar 'length cdlatex-math-symbol-alist-comb))))
 
   ;; The direct key bindings.
   (let (map dummy-map prefix modifiers symbol bindings)

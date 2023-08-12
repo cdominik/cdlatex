@@ -1,6 +1,14 @@
 This file documents some more visible changes, in particular if they
 change previous behavior.
 
+* Version 4.17
+- Fixed bug when cdlatex-math-symbol-alist has more than 3 levels.
+  Thanks to Yuchen Lea for reporting this issue.
+
+* Version 4.16
+- Integrated cdlatex-electricindex-mode
+- Environments keep the indentation when called from a position with
+  indentation.
 * Version 4.15
 When the region is active, pressing dollar will bracket the region
 with two $ characters, putting it into math mode.
