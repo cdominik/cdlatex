@@ -2203,7 +2203,7 @@ and after changes to these variables via
 
   ;; find out how many levels are needed for the math symbol stuff
   (setq cdlatex-math-symbol-no-of-levels
-        (1- (apply 'max (mapcar 'length cdlatex-math-symbol-alist-comb))))
+        (1- (apply #'max (mapcar #'length cdlatex-math-symbol-alist-comb))))
 
   ;; The direct key bindings.
   (let (map dummy-map prefix modifiers symbol bindings)
