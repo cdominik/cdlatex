@@ -1457,7 +1457,7 @@ zZ
       (cond
        ( (= this-char ?\?)
          (setq value "SCROLL"))
-       ( (= this-char ?\C-m)
+       ( (member this-char '(?\C-j ?\C-m))
          (setq this-char ?\ )
          (setq value ""))
        ( t
