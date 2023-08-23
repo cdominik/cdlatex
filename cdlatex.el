@@ -1336,8 +1336,12 @@ constant `cdlatex-math-modify-alist'."
       (setq acc    (nth 2 ass))
       (setq rmdot  (nth 3 ass))
       (setq it     (nth 4 ass))
-      (if (not cmd) (error "No such modifier `%c' %s math mode" char
-                           (if inside-math "inside" "outside")))
+      (if (not cmd)
+          (progn
+            (message "No such modifier `%c' %s math mode" char
+                     (if inside-math "inside" "outside"))
+            (insert cdlatex-math-modify-prefix char)
+            (throw 'exit t)))
       (if (string-match "\\(.*\\)\\?\\(.*\\)" cmd)
           (setq before (match-string 1 cmd) after (match-string 2 cmd)))
       (cond
