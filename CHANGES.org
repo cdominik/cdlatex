@@ -1,6 +1,11 @@
 This file documents some more visible changes, in particular if they
 change previous behavior.
 
+
+* Version 4.18
+- Fix bug with intersion of ' in normal text when not modifier is
+  defined.
+- Fix the display of automatic help for the many-characger mode.
 * Version 4.17
 - Fixed bug when cdlatex-math-symbol-alist has more than 3 levels.
   Thanks to Yuchen Lea for reporting this issue.
