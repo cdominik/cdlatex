@@ -1,0 +1,5 @@
+*~
+test/*
+*.elc
+/cdlatex-pkg.el
+/cdlatex-autoloads.el

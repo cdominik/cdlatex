@@ -1,0 +1,34 @@
+This file documents some more visible changes, in particular if they
+change previous behavior.
+
+
+* Version 4.18
+- Fix bug with intersion of ' in normal text when not modifier is
+  defined.
+- Fix the display of automatic help for the many-characger mode.
+* Version 4.17
+- Fixed bug when cdlatex-math-symbol-alist has more than 3 levels.
+  Thanks to Yuchen Lea for reporting this issue.
+
+* Version 4.16
+- Integrated cdlatex-electricindex-mode
+- Environments keep the indentation when called from a position with
+  indentation.
+* Version 4.15
+When the region is active, pressing dollar will bracket the region
+with two $ characters, putting it into math mode.
+
+* Version 4.13
+- The default value of
+  `cdlatex-cdlatex-make-sub-superscript-roman-if-pressed-twice' is now
+  t, meaning the feature is turned on by default.
+- We used to use _{\rm ...} to create roman subscripts.  This is not
+  longer up to standards with LaTeX, so we have now switched to using
+  \mathrm instead.  Thanks to Sinthoras for pointing this out.  
+- The selection characters for the \overbrace construct has changed.
+  It used to be '{ and it is now '] .  The changes was needed to free
+  up the { character for the next point.
+- It is now easier to inject a \left( ... \right) construct after the
+  content has already been typed.  Just select the content and type '(
+  Similarly, you can inject left-right pairs or {, [, <, and | in the
+  same way.  Thanks to Sinthoras for this proposal.
