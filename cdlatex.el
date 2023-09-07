@@ -1006,7 +1006,7 @@ Sounds strange?  Try it out!"
                 (= (preceding-char) ?-))
             (throw 'stop t)
           (forward-char 1)
-          (if (looking-at "[^_\\^({\\[]")
+          (if (looking-at "[^_^({[]")
               ;; stop after closing bracket, unless ^_[{( follow
               (throw 'stop t))))))))
 
