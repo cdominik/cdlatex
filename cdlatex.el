@@ -3,7 +3,7 @@
 ;;
 ;; Author: Carsten Dominik <carsten.dominik@gmail.com>
 ;; Keywords: tex
-;; Version: 4.18c
+;; Version: 4.18d
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -1101,7 +1101,7 @@ the template.  This is mainly useful for \"items\" of environments, where
       (goto-char begpos)
       (while (search-forward "AUTOFILE" (marker-position endmarker) t)
         (backward-delete-char 8)
-        (call-interactively 'cdlatexi-nsert-filename))
+        (call-interactively 'cdlatex-insert-filename))
 
       ;; Look for AUTOLABEL requests
       (goto-char begpos)
