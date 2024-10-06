@@ -1630,6 +1630,7 @@ zZ
     ( ?e    "\\mathem"            "\\emph"   t   nil nil )
     ( ?y    "\\mathtt"            "\\texttt" t   nil nil )
     ( ?f    "\\mathsf"            "\\textsf" t   nil nil )
+    ( ?k    "\\mathfrak"          nil        t   nil nil )
     ( ?0    "\\textstyle"         nil        nil nil nil )
     ( ?1    "\\displaystyle"      nil        nil nil nil )
     ( ?2    "\\scriptstyle"       nil        nil nil nil )
