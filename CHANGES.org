@@ -6,6 +6,8 @@ change previous behavior.
 - Fix bug with intersion of ' in normal text when not modifier is
   defined.
 - Fix the display of automatic help for the many-characger mode.
+- Added an equation* template, F to insert \Phi, and a key to insert
+  mathfrak characters.  Thanks to Doxdrum.
 * Version 4.17
 - Fixed bug when cdlatex-math-symbol-alist has more than 3 levels.
   Thanks to Yuchen Lea for reporting this issue.
