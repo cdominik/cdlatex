@@ -807,10 +807,16 @@ Elements of KEEP-LIST are not removed even if duplicate."
     (if (and (stringp cdlatex-paired-parens)
              (string-match (regexp-quote paren) cdlatex-paired-parens)
              (not (cdlatex-number-of-backslashes-is-odd)))
-        (progn
-          (insert paren)
-          (insert (cdr (assoc paren cdlatex-parens-pairs)))
-          (forward-char -1))
+        (if (region-active-p)
+            (let ((s (region-beginning)) (e (region-end)))
+              (goto-char s)
+              (insert paren)
+              (goto-char (1+ e))
+              (insert (cdr (assoc paren cdlatex-parens-pairs))))
+          (progn
+            (insert paren)
+            (insert (cdr (assoc paren cdlatex-parens-pairs)))
+            (forward-char -1)))
       (insert paren))))
 
 (defun cdlatex-ensure-math ()
