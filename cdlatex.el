@@ -1629,6 +1629,7 @@ zZ
     ( ?i    "\\mathit"            "\\textit" t   nil nil )
     ( ?l    nil                   "\\textsl" t   nil nil )
     ( ?b    "\\mathbf"            "\\textbf" t   nil nil )
+    ( ?B    "\\mathbb"            nil        t   nil nil )
     ( ?e    "\\mathem"            "\\emph"   t   nil nil )
     ( ?y    "\\mathtt"            "\\texttt" t   nil nil )
     ( ?f    "\\mathsf"            "\\textsf" t   nil nil )
