@@ -549,11 +549,17 @@ Each element contains 6 items:
   :group 'cdlatex-math-support
   :type 'boolean)
 
-(defcustom cdlatex-use-dollar-to-ensure-math t
-  "Non-nil means, use $...$ to force a math mode setting where needed.
-When nil, use \\(...\\) instead."
+;; (defcustom cdlatex-use-dollar-to-ensure-math t
+;;   "Non-nil means, use $...$ to force a math mode setting where needed.
+;; When nil, use \\(...\\) instead."
+;;   :group 'cdlatex-math-support
+;;   :type '(boolean))
+
+(defcustom cdlatex-ensure-math-delimiter "$"
+  "The prefix used to ensure that the input is in math mode where needed.
+When nil, no delimiter will be chosen."
   :group 'cdlatex-math-support
-  :type '(boolean))
+  :type '(boolean string))
 
 ;; Miscellaneous configurations -----------------------------------------
 
@@ -813,13 +819,21 @@ Elements of KEEP-LIST are not removed even if duplicate."
           (forward-char -1))
       (insert paren))))
 
+;; (defun cdlatex-ensure-math ()
+;;   "Make sure we are in math mode."
+;;   (unless (if (fboundp 'texmathp) (texmathp) t)
+;;     (if cdlatex-use-dollar-to-ensure-math
+;;         (cdlatex-dollar)
+;;       (insert "\\(\\)")
+;;       (backward-char 2))))
+
 (defun cdlatex-ensure-math ()
   "Make sure we are in math mode."
-  (unless (if (fboundp 'texmathp) (texmathp) t)
-    (if cdlatex-use-dollar-to-ensure-math
-        (cdlatex-dollar)
-      (insert "\\(\\)")
-      (backward-char 2))))
+  (cond ((string= cdlatex-ensure-math-delimiter "$")
+         (cdlatex-dollar))
+        ((string= cdlatex-ensure-math-delimiter "(")
+         (insert "\\(\\)")
+         (backward-char 2))))
 
 (defun cdlatex-dollar (&optional arg)
   "Insert a pair of dollars unless number of backslashes before point is odd.
