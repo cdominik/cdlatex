@@ -1837,6 +1837,13 @@ AUTOLABEL
 nil
 )
 ;;------------------------------------
+( "equation*"
+"\\begin{equation*}
+?
+\\end{equation*}"
+nil
+)
+;;------------------------------------
 ( "figure"
 "\\begin{figure}[htbp]
 \\centerline{\\includegraphics[]{AUTOFILE}}
