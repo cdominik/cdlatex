@@ -1094,7 +1094,10 @@ the template.  This is mainly useful for \"items\" of environments, where
             (setq template
                   (replace-regexp-in-string "\n" (concat "\n" prefix) template))
             (insert template))
-        (insert "\\begin{" env "}\n?\n\\end{" env "}\n"))
+        (insert (replace-regexp-in-string
+                 "\n" (concat "\n" prefix)
+                 (concat "\\begin{" env "}\n?\n\\end{" env "}"))
+                "\n"))
       (move-marker endmarker (point))
 
       ;; Look for AUTOFILE requests
